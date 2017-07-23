@@ -16,20 +16,26 @@ def extract_keywords(arg_list):
 		parsed_single = get_html_parser(newurl)
 		keyword_haystack = parsed_single
 
-		if re.search(r'javascript', keyword_haystack.get_text(), re.IGNORECASE):
+		if re.search(r'javascript[\W]', keyword_haystack.get_text(), re.IGNORECASE):
 			results['Javascript'] += 1
 
-		if re.search(r'Python', keyword_haystack.get_text(), re.IGNORECASE):
+		if re.search(r'Python[\W]', keyword_haystack.get_text(), re.IGNORECASE):
 			results['Python'] += 1
 
-		if re.search(r'PHP', keyword_haystack.get_text(), re.IGNORECASE):
+		if re.search(r'PHP[\W]', keyword_haystack.get_text(), re.IGNORECASE):
 			results['PHP'] += 1
 
-		if re.search(r'.net', keyword_haystack.get_text(), re.IGNORECASE):
+		if re.search(r'.net[\W]', keyword_haystack.get_text(), re.IGNORECASE):
 			results['C#'] += 1
 
-		if re.search(r'java', keyword_haystack.get_text(), re.IGNORECASE):
+		if re.search(r'java[\W]', keyword_haystack.get_text(), re.IGNORECASE):
 			results['Java'] += 1
+
+def get_next_page(url):
+	data = url.findAll('div',attrs={'class':'pagination'})
+
+	for page_link in data:
+		print (page_link.a['href'])
 
 def get_job_links(url):
 	parse = get_html_parser(url)
@@ -40,6 +46,8 @@ def get_job_links(url):
 		link_list.append(link['href'])
 
 	extract_keywords(link_list)
+	get_next_page(parse)
+
 
 get_job_links(originalurl)
 print(results)
